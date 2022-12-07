@@ -14,3 +14,10 @@ debug = DebugToolbarExtension(app)
 
 connect_db(app)
 db.create_all()
+
+@app.get("/")
+def show_users():
+    """ show user list """
+
+    users = User.query.all()
+    return render_template
