@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+
+{% block title %} Users List {% endblock %}
+
+
+{% block content %}
+<div class="row">
+    <div class="col-2">{{user.image_url}}</div>
+    <span>{{user.first_name}}</span><span>{{user.last_name}} </span>
+</div>
+<a class="btn btn-info" href="">Edit</a>
+<a class="btn btn-danger" href="">Delete</a>
+
+
+
+{% endblock %}
