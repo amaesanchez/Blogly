@@ -2,7 +2,7 @@
 
 from flask import Flask, render_template, request, flash, redirect
 from flask_debugtoolbar import DebugToolbarExtension
-from models import db, connect_db, User
+from models import db, connect_db, User, Post
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = "abc123"
@@ -93,3 +93,32 @@ def delete_user(userid):
     db.session.commit()
 
     return redirect("/users")
+
+@app.get("/users/<int:userid>/posts/new")
+def display_post_form(userid):
+    """show form to add a post for that user"""
+
+    user = User.query.get(userid)
+
+    return render_template("post_add_form.html", user=user)
+
+@app.post("/users/<int:userid>/posts/new")
+def make_new_post(userid):
+    """Handle add form; add post and redirect to the user detail page."""
+
+    # post = Post.query.filter_by(uder_id=uderid)
+    user = User.query.get(userid)
+
+    title = request.form.get('title')
+    content = request.form.get('content')
+
+    new_post = Post(title, content)
+    
+    user.posts.append(new_post)
+
+    # db.session.user.posts.append(new_post)
+    db.session.commit()
+
+
+
+    
