@@ -9,9 +9,19 @@
     <span>{{user.first_name}} {{user.last_name}}</span>
 </div>
 <form method="POST" action="/users/{{user.id}}/delete">
-  <a class="btn btn-info" href="/users/{{ user.id }}/edit">Edit</a>
+  <a class="btn btn-primary" href="/users/{{ user.id }}/edit">Edit</a>
   <button class="btn btn-danger">Delete</button>
 </form>
+
+<div>
+  <h1>Posts</h1>
+  <ul>
+    {% for post in posts %}
+      <li><a href="/posts/{{ post.id }}">{{ post.title }}</a></li>
+    {% endfor %}
+  </ul>
+</div>
+<a class="btn btn-primary" href="">Add Post</a>
 
 
 {% endblock %}
