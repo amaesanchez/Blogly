@@ -153,7 +153,7 @@ def delete_post(postid):
     """ Deletes post from database """
 
     post = Post.query.get(postid)
-    breakpoint()
+
     db.session.delete(post)
     db.session.commit()
 

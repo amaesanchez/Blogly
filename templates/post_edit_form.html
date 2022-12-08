@@ -7,7 +7,7 @@
 
 <h1>Edit Post</h1>
 
-<form method="POST" action="/posts/{{ post.id }}">
+<form method="POST" action="/posts/{{ post.id }}/edit">
   <div class="mb-3">
     <label>Title
         <input name="title" type="text" value={{ post.title }}>
@@ -15,7 +15,7 @@
   </div>
   <div class="mb-3">
     <label>Content
-        <input name="content" class="form-control" value={{ post.content }}>
+        <textarea class="form-control" type="text" name="content">{{ post.content }}</textarea>
     </label>
   </div>
   <a class="btn btn-info" href="/posts/{{ post.id }}">Cancel</a>
