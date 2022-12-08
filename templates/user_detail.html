@@ -5,12 +5,13 @@
 
 {% block content %}
 <div class="row">
-    <div class="col-2">{{user.image_url}}</div>
-    <span>{{user.first_name}}</span><span>{{user.last_name}} </span>
+    <div class="col-2"><img src={{user.image_url}}></div>
+    <span>{{user.first_name}} {{user.last_name}}</span>
 </div>
-<a class="btn btn-info" href="">Edit</a>
-<a class="btn btn-danger" href="">Delete</a>
-
+<form method="POST" action="/users/{{user.id}}/delete">
+  <a class="btn btn-info" href="/users/{{ user.id }}/edit">Edit</a>
+  <button class="btn btn-danger">Delete</button>
+</form>
 
 
 {% endblock %}

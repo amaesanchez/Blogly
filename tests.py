@@ -60,10 +60,62 @@ class UserViewTestCase(TestCase):
         """Clean up any fouled transaction."""
         db.session.rollback()
 
+    # def __repr__(self):
+    #     e = self
+    #     return f"<User {e.first_name} {e.last_name}>"
+
     def test_list_users(self):
+        """ renders users_listing template """
         with self.client as c:
             resp = c.get("/users")
-            self.assertEqual(resp.status_code, 200)
+
             html = resp.get_data(as_text=True)
+
+            self.assertEqual(resp.status_code, 200)
             self.assertIn("test1_first", html)
             self.assertIn("test1_last", html)
+
+    def test_add_user_to_table(self):
+        with self.client as c:
+            resp = c.post("/users-new", data={
+                "first_name" : "Arlaine",
+                "last_name" : "Ditto",
+                "image_url" : None
+            })
+
+            self.assertEqual(resp.status_code, 302)
+            self.assertEqual(resp.location, "/users")
+            # what does the query return
+            self.assertEqual(User.query.filter_by(first_name = "Arlaine"),
+                "<flask_sqlalchemy.query.Query object at 0x105a362f0>")
+
+    def test_add_user_redirection_followed(self):
+        with self.client as c:
+            resp = c.post("/users-new", data={
+                "first_name" : "Arlaine",
+                "last_name" : "Ditto",
+                "image_url" : None
+            }, follow_redirects=True)
+
+            html = resp.get_data(as_text=True)
+
+            self.assertEqual(resp.status_code, 200)
+            self.assertIn("<!-- THIS IS THE USERS PAGE -->", html)
+
+    def test_displays_user_details(self):
+        with self.client as c:
+            resp = c.get(f"/users/{self.user_id}")
+
+            html = resp.get_data(as_text=True)
+
+            self.assertEqual(resp.status_code, 200)
+            self.assertIn("test1_first", html)
+
+    def test_displays_user_edit_form(self):
+        with self.client as c:
+            resp = c.get(f"/users/{self.user_id}/edit")
+
+            html = resp.get_data(as_text=True)
+
+            self.assertEqual(resp.status_code, 200)
+            self.assertIn("Edit a user", html)

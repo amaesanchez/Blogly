@@ -6,14 +6,15 @@
 {% block content %}
 
 <h1>Users</h1>
-
+<!-- THIS IS THE USERS PAGE -->
+blahblahblahhhhh
 <ul>
   {% for user in users %}
     <!-- extract first name & last name and turn into a list with link
     to user_detail -->
-    <l><a href="/userdetails/{{user.id}}">{{ user.first_name }} {{ user.last_name }}</a></l>
+    <li><a href="/users/{{user.id}}">{{ user.first_name }} {{ user.last_name }}</a></li>
   {% endfor %}
 </ul>
-<a class="btn btn-info" href="/userform">Add user</a>
+<a class="btn btn-info" href="/users-new">Add user</a>
 
 {% endblock %}
