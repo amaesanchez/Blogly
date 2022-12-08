@@ -86,8 +86,8 @@ class UserViewTestCase(TestCase):
             self.assertEqual(resp.status_code, 302)
             self.assertEqual(resp.location, "/users")
             # what does the query return
-            self.assertEqual(User.query.filter_by(first_name = "Arlaine"),
-                "<flask_sqlalchemy.query.Query object at 0x105a362f0>")
+            # self.assertEqual(User.query.filter_by(first_name = "Arlaine"),
+            #     "<flask_sqlalchemy.query.Query object at 0x105a362f0>")
 
     def test_add_user_redirection_followed(self):
         with self.client as c:
@@ -100,7 +100,7 @@ class UserViewTestCase(TestCase):
             html = resp.get_data(as_text=True)
 
             self.assertEqual(resp.status_code, 200)
-            self.assertIn("<!-- THIS IS THE USERS PAGE -->", html)
+            self.assertIn("Arlaine Ditto", html)
 
     def test_displays_user_details(self):
         with self.client as c:
