@@ -1,7 +1,7 @@
 from unittest import TestCase
 
 from app import app, db
-from models import DEFAULT_IMAGE_URL, User, connect_db
+from models import DEFAULT_IMAGE_URL, User, connect_db, Post
 
 # Let's configure our app to use a different database for tests
 app.config['SQLALCHEMY_DATABASE_URI'] = "postgresql:///blogly_test"
@@ -31,6 +31,7 @@ class UserViewTestCase(TestCase):
         # As you add more models later in the exercise, you'll want to delete
         # all of their records before each test just as we're doing with the
         # User model below.
+        Post.query.delete()
         User.query.delete()
 
         self.client = app.test_client()
@@ -47,14 +48,26 @@ class UserViewTestCase(TestCase):
             image_url=None,
         )
 
+        
+
         db.session.add_all([test_user, second_user])
         db.session.commit()
+
+        test_post = Post(
+            title="This is a test",
+            content="hurray you passed maybe",
+            user_id=test_user.id
+        )
+
+        db.session.add(test_post)
+        db.session.commit() 
 
         # We can hold onto our test_user's id by attaching it to self (which is
         # accessible throughout this test class). This way, we'll be able to
         # rely on this user in our tests without needing to know the numeric
         # value of their id, since it will change each time our tests are run.
         self.user_id = test_user.id
+        self.post_id = test_post.id
 
     def tearDown(self):
         """Clean up any fouled transaction."""
@@ -120,3 +133,51 @@ class UserViewTestCase(TestCase):
 
             self.assertEqual(resp.status_code, 200)
             self.assertIn("Edit a user", html)
+
+    def test_displays_new_post_form(self):
+        with self.client as c:
+            resp = c.get(f"/users/{self.user_id}/posts/new")
+
+            html = resp.get_data(as_text=True)
+
+            self.assertEqual(resp.status_code, 200)
+            self.assertIn("Add Post for test1_first test1_last", html)
+
+    def test_add_new_post(self):
+        with self.client as c:
+
+            resp = c.post("/users/1/posts/new", data={
+                "title" : "I like cheese",
+                "content" : "because it's dope",
+                "user_id" : self.user_id
+            })
+
+            self.assertEqual(resp.status_code, 302)
+            self.assertEqual(resp.location, "/users/{self.user_id}")
+
+    def test_add_new_post(self):
+        with self.client as c:
+
+            resp = c.post("/users/1/posts/new", data={
+                "title" : "I like cheese",
+                "content" : "because it's dope",
+                "user_id" : self.user_id
+            }, follow_redirects=True)
+
+            html = resp.get_data(as_text=True)
+
+            self.assertEqual(resp.status_code, 200)
+            self.assertIn("I like cheese", html)
+
+    def test_display_post(self):
+        with self.client as c:
+
+            resp = c.get(f"/posts/{self.post_id}")
+
+            html = resp.get_data(as_text=True)
+
+            self.assertEqual(resp.status_code, 200)
+            self.assertIn("Add Post for test1_first test1_last", html)
+
+
+            
