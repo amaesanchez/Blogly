@@ -76,6 +76,7 @@ class UserViewTestCase(TestCase):
             self.assertIn("test1_last", html)
 
     def test_add_user_to_table(self):
+        """ """
         with self.client as c:
             resp = c.post("/users-new", data={
                 "first_name" : "Arlaine",

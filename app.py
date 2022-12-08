@@ -112,13 +112,49 @@ def make_new_post(userid):
     title = request.form.get('title')
     content = request.form.get('content')
 
-    new_post = Post(title, content)
-    
-    user.posts.append(new_post)
+    new_post = Post(title = title, content = content, user_id = user.id)
 
-    # db.session.user.posts.append(new_post)
+    db.session.add(new_post)
     db.session.commit()
 
+    return redirect(f"/users/{userid}")
 
+@app.get("/posts/<int:postid>")
+def display_post(postid):
+    """ show user's selected post """
 
-    
+    post = Post.query.get(postid)
+
+    return render_template("post_details.html", post = post)
+
+@app.get("/posts/<int:postid>/edit")
+def display_post_edit_form(postid):
+    """ show the post edit form """
+
+    post = Post.query.get(postid)
+
+    return render_template("post_edit_form.html", post = post)
+
+@app.post("/posts/<int:postid>/edit")
+def make_post_edits(postid):
+    """ Handles editing of a post & redirects to post details """
+
+    post = Post.query.get(postid)
+
+    post.title = request.form.get("title")
+    post.content = request.form.get("content")
+
+    db.session.commit()
+
+    return redirect(f"/posts/{post.id}")
+
+@app.post("/posts/<int:postid>/delete")
+def delete_post(postid):
+    """ Deletes post from database """
+
+    post = Post.query.get(postid)
+    breakpoint()
+    db.session.delete(post)
+    db.session.commit()
+
+    return redirect("/users")

@@ -10,10 +10,10 @@
   <p>{{ post.content }}</p>
   <p>By {{ post.user.first_name }} {{ post.user.last_name }}</p>
 </div>
-
-<button class="btn btn-light" href="/users/{{ post.user.id }}">Cancel</button>
-<button class="btn btn-primary" href="/posts/{{ post.id }}/edit">Edit</button>
-<button class="btn btn-danger" href="/posts/{{ post.id }}/delete">Delete</button>
-
+<form method="POST" action="/posts/{{ post.id }}/delete">
+  <a class="btn btn-light" href="/users/{{ post.user.id }}">Cancel</a>
+  <a class="btn btn-primary" href="/posts/{{ post.id }}/edit">Edit</a>
+  <button class="btn btn-danger">Delete</button>
+</form>
 
 {% endblock %}
