@@ -2,7 +2,7 @@
 
 from flask import Flask, render_template, request, flash, redirect
 from flask_debugtoolbar import DebugToolbarExtension
-from models import db, connect_db, User, Post
+from models import db, connect_db, User, Post, Tag, PostTag
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = "abc123"
@@ -88,8 +88,11 @@ def delete_user(userid):
     """ deletes user from database """
 
     user = User.query.get(userid)
-
+    posts = user.posts
+    
+    db.session.delete(posts)
     db.session.delete(user)
+    # db.session.delete_all[(posts), (user)]
     db.session.commit()
 
     return redirect("/users")
