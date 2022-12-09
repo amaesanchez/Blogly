@@ -18,6 +18,11 @@
         <textarea class="form-control" type="text" name="content">{{ post.content }}</textarea>
     </label>
   </div>
+
+  <!-- {% for tag in tags %}
+    <input name="tag" type="checkbox" value={{ tag.name }}>
+  {% endfor %} -->
+
   <a class="btn btn-info" href="/posts/{{ post.id }}">Cancel</a>
   <button type="submit"class="btn btn-success">Add</button>
 </form>
